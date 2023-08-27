@@ -12,10 +12,6 @@ connectDB();
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
 app.use("/api/products", productRoutes);
 
 if (process.env.NODE_ENV === "production") {
