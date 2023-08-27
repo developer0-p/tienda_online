@@ -15,7 +15,7 @@ const HomeScreen = () => {
   }, [])
   return (
     <>
-      <h1>Últimas Novedades (serving & fetching data)</h1>
+      <h1>Últimas Novedades (data from atlas Mongodb)</h1>
       <Row>
         {products.map((product) => (
           <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
