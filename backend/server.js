@@ -4,7 +4,7 @@ dotenv.config();
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import path from "path";
-
+import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 const port = process.env.PORT || 5000;
 
@@ -13,6 +13,7 @@ connectDB();
 const app = express();
 
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
