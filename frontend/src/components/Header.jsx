@@ -1,4 +1,4 @@
-import { Badge, Navbar, Nav, Container } from 'react-bootstrap'
+import { Badge, Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import { FaShoppingCart, FaUser } from 'react-icons/fa'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector } from 'react-redux'
@@ -7,6 +7,10 @@ import logo from '../assets/logo.png'
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart)
+  const { userInfo } = useSelector((state) => state.auth)
+  const logoutHandler = ()=>{
+    console.log('desconectarse')
+  }
   return (
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
@@ -36,11 +40,22 @@ const Header = () => {
                   )}
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to='/login'>
+              {userInfo ? (
+                <NavDropdown title={userInfo.name} id='username'>
+                  <LinkContainer to='/profile'>
+                    <NavDropdown.Item>Perfil</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Salir
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to='/login'>
                 <Nav.Link>
                   <FaUser /> Inicia sesión
                 </Nav.Link>
               </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
