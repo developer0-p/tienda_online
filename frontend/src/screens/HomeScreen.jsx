@@ -16,7 +16,7 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
-          <h1>Últimas Novedades (backend authentication)</h1>
+          <h1>Últimas Novedades (frontend authentication)</h1>
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
