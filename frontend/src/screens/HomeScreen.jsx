@@ -1,22 +1,22 @@
-import { useGetProductsQuery } from '../slices/productsApiSlice'
-import { Row, Col } from 'react-bootstrap'
-import Product from '../components/Products'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
+import { useGetProductsQuery } from "../slices/productsApiSlice";
+import { Row, Col } from "react-bootstrap";
+import Product from "../components/Products";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const HomeScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery()
+  const { data: products, isLoading, error } = useGetProductsQuery();
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>
+        <Message variant="danger">
           {error?.data?.message || error.error}
         </Message>
       ) : (
         <>
-          <h1>Últimas Novedades (frontend authentication (8 de 14))</h1>
+          <h1>Últimas Novedades (checkout process part 1 (9 de 14))</h1>
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -27,7 +27,7 @@ const HomeScreen = () => {
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;

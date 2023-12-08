@@ -38,7 +38,7 @@ const CheckOutSteps = ({step1,step2,step3,step4}) => {
                     <Nav.Link>Resumen</Nav.Link>
                 </LinkContainer>
             ) : (
-                <Nav.Link disabled>Iniciar sesión</Nav.Link>
+                <Nav.Link disabled>Resumen</Nav.Link>
             ) }
         </Nav.Item>                        
     </Nav>
