@@ -48,17 +48,13 @@ const PlaceOrderScreen = () => {
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Envío</h2>
+              <h2>Resumen</h2>
               <p>
                 <strong>Dirección: </strong>
                 {cart.shippingAddress.address} {cart.shippingAddress.city}{" "}
                 {cart.shippingAddress.postalCode}
                 {", "} {cart.shippingAddress.state}
               </p>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h2>Pago</h2>
               <strong>Método de pago: </strong>
               {cart.paymentMethod}
             </ListGroup.Item>
@@ -121,14 +117,18 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total:</Col>
-                  <Col>{cart.totalPrice}€</Col>
+                  <Col>
+                    <strong>{cart.totalPrice}€</strong>
+                  </Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                {error && (
+
+              {error && (
+                <ListGroup.Item>
                   <Message variant="danger">{error.data.message}</Message>
-                )}
-              </ListGroup.Item>
+                </ListGroup.Item>
+              )}
+
               <ListGroup.Item>
                 <Button
                   type="button"
