@@ -183,30 +183,30 @@ const OrderScreen = () => {
                   <Col>{order.totalPrice}€</Col>
                 </Row>
               </ListGroup.Item>
-              (!order.isPaid && (
-              <ListGroup.Item>
-                {loadingPay && <Loader />}
-                {isPending ? (
-                  <Loader />
-                ) : (
-                  <div>
-                    <Button
-                      onClick={onApproveTest}
-                      style={{ marginBottom: "10px" }}
-                    >
-                      Test Pay Order
-                    </Button>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {isPending ? (
+                    <Loader />
+                  ) : (
                     <div>
-                      <PayPalButtons
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                        onError={onError}
-                      ></PayPalButtons>
+                      {/*  <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: "10px" }}
+                      >
+                        Test Pay Order
+                      </Button> */}
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </ListGroup.Item>
-              ))
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
