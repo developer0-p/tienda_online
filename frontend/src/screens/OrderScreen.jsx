@@ -10,7 +10,7 @@ import {
   Card,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { UseSelector, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -18,6 +18,7 @@ import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
+  useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 
 const OrderScreen = () => {
@@ -31,6 +32,9 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -97,6 +101,15 @@ const OrderScreen = () => {
       });
   }
 
+  const deliverHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Pedido enviado");
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
+    }
+  };
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -122,7 +135,7 @@ const OrderScreen = () => {
                 {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.state}
               </p>
-              {order.isDeliver ? (
+              {order.isDelivered ? (
                 <Message variant="success">
                   Enviado el {order.deliveredAt}
                 </Message>
@@ -207,6 +220,21 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Marcar como enviado
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
