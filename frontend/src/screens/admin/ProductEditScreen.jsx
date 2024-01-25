@@ -1,52 +1,56 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
-import FormContainer from "../../components/FormContainer";
-import { toast } from "react-toastify";
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
+import Message from '../../components/Message'
+import Loader from '../../components/Loader'
+import FormContainer from '../../components/FormContainer'
+import { toast } from 'react-toastify'
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-} from "../../slices/productsApiSlice";
+  useUploadProductImageMutation,
+} from '../../slices/productsApiSlice'
 
 const ProductEditScreen = () => {
-  const { id: productId } = useParams();
+  const { id: productId } = useParams()
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
-  const [brand, setBrand] = useState("");
-  const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState(0)
+  const [image, setImage] = useState('')
+  const [brand, setBrand] = useState('')
+  const [category, setCategory] = useState('')
+  const [countInStock, setCountInStock] = useState(0)
+  const [description, setDescription] = useState('')
 
   const {
     data: product,
     isLoading,
     refetch,
     error,
-  } = useGetProductDetailsQuery(productId);
+  } = useGetProductDetailsQuery(productId)
 
   const [updateProduct, { isLoading: loadingUpdate }] =
-    useUpdateProductMutation();
+    useUpdateProductMutation()
 
-  const navigate = useNavigate();
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (product) {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
+      setName(product.name)
+      setPrice(product.price)
+      setImage(product.image)
+      setBrand(product.brand)
+      setCategory(product.category)
+      setCountInStock(product.countInStock)
+      setDescription(product.description)
     }
-  }, [product]);
+  }, [product])
 
   const submitHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const updatedProduct = {
       _id: productId,
       name,
@@ -56,19 +60,31 @@ const ProductEditScreen = () => {
       category,
       countInStock,
       description,
-    };
-
-    const result = await updateProduct(updatedProduct);
-    if (result.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Producto actualizado");
-      navigate("/admin/productlist");
     }
-  };
+
+    const result = await updateProduct(updatedProduct)
+    if (result.error) {
+      toast.error(result.error)
+    } else {
+      toast.success('Producto actualizado')
+      navigate('/admin/productlist')
+    }
+  }
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData()
+    formData.append('image', e.target.files[0])
+    try {
+      const res = await uploadProductImage(formData).unwrap()
+      toast.success(res.message)
+      setImage(res.image)
+    } catch (err) {
+      toast.error(err?.data?.message || err.error)
+    }
+  }
   return (
     <>
-      <Link to="/admin/productlist" className="btn btn-light my-3">
+      <Link to='/admin/productlist' className='btn btn-light my-3'>
         Volver
       </Link>
       <FormContainer>
@@ -78,78 +94,92 @@ const ProductEditScreen = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Message variant="danger">{error}</Message>
+          <Message variant='danger'>{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name" className="my-2">
+            <Form.Group controlId='name' className='my-2'>
               <Form.Label>Nombre</Form.Label>
               <Form.Control
-                type="name"
-                placeholder="Introduce un nombre"
+                type='name'
+                placeholder='Introduce un nombre'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="price" className="my-2">
+            <Form.Group controlId='price' className='my-2'>
               <Form.Label>Precio</Form.Label>
               <Form.Control
-                type="number"
-                placeholder="Introduce un precio"
+                type='number'
+                placeholder='Introduce un precio'
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            {/* image here */}
 
-            <Form.Group controlId="brand" className="my-2">
+            <Form.Group controlId='image' className='my-2'>
+              <Form.Label>Imagen</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Introduce url de la imagen'
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                type='file'
+                label='Elige fichero'
+                onChange={uploadFileHandler}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='brand' className='my-2'>
               <Form.Label>Marca</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Introduce una marca"
+                type='text'
+                placeholder='Introduce una marca'
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="countInStock" className="my-2">
+            <Form.Group controlId='countInStock' className='my-2'>
               <Form.Label>Stock</Form.Label>
               <Form.Control
-                type="number"
-                placeholder="Introduce stock"
+                type='number'
+                placeholder='Introduce stock'
                 value={countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="category" className="my-2">
+            <Form.Group controlId='category' className='my-2'>
               <Form.Label>Categoría</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Introduce categoría"
+                type='text'
+                placeholder='Introduce categoría'
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="description" className="my-2">
+            <Form.Group controlId='description' className='my-2'>
               <Form.Label>Descripción</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Introduce descripción"
+                type='text'
+                placeholder='Introduce descripción'
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Button type="submit" variant="primary" className="my-2">
+            <Button type='submit' variant='primary' className='my-2'>
               Actualizar
             </Button>
           </Form>
         )}
       </FormContainer>
     </>
-  );
-};
+  )
+}
 
-export default ProductEditScreen;
+export default ProductEditScreen
