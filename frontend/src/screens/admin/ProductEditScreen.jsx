@@ -25,7 +25,7 @@ const ProductEditScreen = () => {
   const {
     data: product,
     isLoading,
-    refetch,
+    // refetch,
     error,
   } = useGetProductDetailsQuery(productId)
 
@@ -90,6 +90,7 @@ const ProductEditScreen = () => {
       <FormContainer>
         <h1>Editar producto</h1>
         {loadingUpdate && <Loader />}
+        {loadingUpload && <Loader />}
 
         {isLoading ? (
           <Loader />
