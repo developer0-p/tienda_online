@@ -90,7 +90,6 @@ const ProductEditScreen = () => {
       <FormContainer>
         <h1>Editar producto</h1>
         {loadingUpdate && <Loader />}
-        {loadingUpload && <Loader />}
 
         {isLoading ? (
           <Loader />
@@ -132,6 +131,7 @@ const ProductEditScreen = () => {
                 onChange={uploadFileHandler}
               ></Form.Control>
             </Form.Group>
+            {loadingUpload && <Loader />}
 
             <Form.Group controlId='brand' className='my-2'>
               <Form.Label>Marca</Form.Label>
